@@ -158,7 +158,8 @@ async function getUrlContent(page, url) {
     return { title, content };
 }
 const mutex = new Mutex();
-export default {
+const client = {
     webFetch: (url) => mutex.runExclusive(() => webFetch(url)),
     webSearch: (query) => mutex.runExclusive(() => webSearch(query)),
 };
+export default client;

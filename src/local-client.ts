@@ -2,7 +2,7 @@ import fs from "node:fs";
 import { extractContent } from "@lamartinecabral/extract-content";
 import type { Page } from "puppeteer-core";
 import puppeteer from "puppeteer-core";
-import type { FetchResult, SearchResult } from "./utils.js";
+import type { FetchResult, SearchClient, SearchResult } from "./utils.js";
 import { Mutex } from "./utils.js";
 
 const BRAVE_SEARCH_URL = "https://search.brave.com";
@@ -226,7 +226,9 @@ async function getUrlContent(page: Page, url: string): Promise<FetchResult> {
 
 const mutex = new Mutex();
 
-export default {
+const client: SearchClient = {
   webFetch: (url: string) => mutex.runExclusive(() => webFetch(url)),
   webSearch: (query: string) => mutex.runExclusive(() => webSearch(query)),
 };
+
+export default client;

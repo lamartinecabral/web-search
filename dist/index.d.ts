@@ -1,4 +1,5 @@
-type Provider = {
+import type { SearchClient } from "./utils.js";
+export type Provider = {
     ollama?: {
         apiKey?: string;
     };
@@ -6,8 +7,5 @@ type Provider = {
         apiKey?: string;
     };
 };
-export declare const getWebSearchClient: (providerConfig?: Provider) => Promise<{
-    webFetch: (url: string) => Promise<import("./utils.js").FetchResult>;
-    webSearch: (query: string) => Promise<import("./utils.js").SearchResult[]>;
-}>;
-export {};
+export type { FetchResult, SearchClient, SearchResult } from "./utils.js";
+export declare const getWebSearchClient: (providerConfig?: Provider) => Promise<SearchClient>;

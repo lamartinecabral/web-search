@@ -1,5 +1,5 @@
 import z from "zod";
-import type { FetchResult, SearchResult } from "./utils.js";
+import type { FetchResult, SearchClient, SearchResult } from "./utils.js";
 
 let apiKey = "";
 
@@ -70,7 +70,9 @@ const webFetch = async (url: string): Promise<FetchResult> => {
   }
 };
 
-export default {
+const client: SearchClient = {
   webFetch,
   webSearch,
 };
+
+export default client;

@@ -61,7 +61,8 @@ const innerText = (elem) => {
     return elem && "innerText" in elem ? String(elem.innerText).trim() : "";
 };
 const mutex = new Mutex();
-export default {
+const client = {
     webFetch: (url) => mutex.runExclusive(() => webFetch(url)),
     webSearch: (query) => mutex.runExclusive(() => webSearch(query)),
 };
+export default client;

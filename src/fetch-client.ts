@@ -1,6 +1,6 @@
 import { extractContent } from "@lamartinecabral/extract-content";
 import { Window } from "happy-dom";
-import type { FetchResult, SearchResult } from "./utils.js";
+import type { FetchResult, SearchClient, SearchResult } from "./utils.js";
 import { Mutex } from "./utils.js";
 
 const DUCKDUCKGO_URL = "https://html.duckduckgo.com/html";
@@ -69,7 +69,9 @@ const innerText = <T extends {}>(elem: T | null) => {
 
 const mutex = new Mutex();
 
-export default {
+const client: SearchClient = {
   webFetch: (url: string) => mutex.runExclusive(() => webFetch(url)),
   webSearch: (query: string) => mutex.runExclusive(() => webSearch(query)),
 };
+
+export default client;

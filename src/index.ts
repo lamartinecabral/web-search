@@ -2,22 +2,49 @@ import FetchClient, { isDuckduckgoAvailable } from "./fetch-client.js";
 import LocalClient, { isChromeAvailable } from "./local-client.js";
 import OllamaClient, { setOllamaApiKey } from "./ollama-client.js";
 import TavilyClient, { setTavilyApiKey } from "./tavily-client.js";
+import type { SearchClient } from "./utils.js";
 
-type Provider = {
+export type Provider = {
   ollama?: { apiKey?: string };
   tavily?: { apiKey?: string };
 };
 
-export const getWebSearchClient = async (providerConfig?: Provider) => {
-  if (providerConfig?.ollama?.apiKey) {
-    setOllamaApiKey(providerConfig?.ollama?.apiKey);
-    return OllamaClient;
+export type { FetchResult, SearchClient, SearchResult } from "./utils.js";
+
+type ClientCandidate = {
+  isAvailable: () => boolean | Promise<boolean>;
+  getClient: () => SearchClient | Promise<SearchClient>;
+};
+
+export const getWebSearchClient = async (
+  providerConfig?: Provider,
+): Promise<SearchClient> => {
+  const candidates: ClientCandidate[] = [];
+
+  candidates.push({
+    isAvailable: () => !!providerConfig?.ollama?.apiKey,
+    getClient: () => {
+      setOllamaApiKey(String(providerConfig?.ollama?.apiKey));
+      return OllamaClient;
+    },
+  });
+
+  candidates.push({
+    isAvailable: () => !!providerConfig?.tavily?.apiKey,
+    getClient: () => {
+      setTavilyApiKey(String(providerConfig?.tavily?.apiKey));
+      return TavilyClient;
+    },
+  });
+
+  candidates.push(
+    { isAvailable: isChromeAvailable, getClient: () => LocalClient },
+    { isAvailable: isDuckduckgoAvailable, getClient: () => FetchClient },
+  );
+
+  for (const candidate of candidates) {
+    if (await candidate.isAvailable()) return await candidate.getClient();
   }
-  if (providerConfig?.tavily?.apiKey) {
-    setTavilyApiKey(providerConfig?.tavily?.apiKey);
-    return TavilyClient;
-  }
-  if (isChromeAvailable()) return LocalClient;
-  if (await isDuckduckgoAvailable()) return FetchClient;
+
   throw new Error("Web search feature is not available");
 };

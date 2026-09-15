@@ -58,7 +58,8 @@ const webFetch = async (url) => {
         throw new Error("Web fetch failed");
     }
 };
-export default {
+const client = {
     webFetch,
     webSearch,
 };
+export default client;

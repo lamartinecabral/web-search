@@ -6,6 +6,12 @@ export type SearchResult = {
 
 export type FetchResult = { title: string; content: string };
 
+/** The common interface implemented by every web-search backend. */
+export interface SearchClient {
+  webSearch(query: string): Promise<SearchResult[]>;
+  webFetch(url: string): Promise<FetchResult>;
+}
+
 export class Mutex {
   private locked = false;
   private queue: Array<() => void> = [];
