@@ -1,7 +1,7 @@
-import FetchClient, { isDuckduckgoAvailable } from "./fetch-client.ts";
-import LocalClient, { isChromeAvailable } from "./local-client.ts";
-import OllamaClient, { setOllamaApiKey } from "./ollama-client.ts";
-import TavilyClient, { setTavilyApiKey } from "./tavily-client.ts";
+import FetchClient, { isDuckduckgoAvailable } from "./fetch-client.js";
+import LocalClient, { isChromeAvailable } from "./local-client.js";
+import OllamaClient, { setOllamaApiKey } from "./ollama-client.js";
+import TavilyClient, { setTavilyApiKey } from "./tavily-client.js";
 
 type Provider = {
   ollama?: { apiKey?: string };

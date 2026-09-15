@@ -2,8 +2,8 @@ import fs from "node:fs";
 import { extractContent } from "@lamartinecabral/extract-content";
 import type { Page } from "puppeteer-core";
 import puppeteer from "puppeteer-core";
-import type { FetchResult, SearchResult } from "./utils.ts";
-import { Mutex } from "./utils.ts";
+import type { FetchResult, SearchResult } from "./utils.js";
+import { Mutex } from "./utils.js";
 
 const BRAVE_SEARCH_URL = "https://search.brave.com";
 const WEB_TIMEOUT_MS = 25000;

@@ -1,5 +1,5 @@
 import z from "zod";
-import type { FetchResult, SearchResult } from "./utils.ts";
+import type { FetchResult, SearchResult } from "./utils.js";
 
 let apiKey = "";
 

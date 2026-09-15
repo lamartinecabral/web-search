@@ -1,12 +1,12 @@
 # @lamartinecabral/web-search
 
-A TypeScript web-search client for RAG workflows. It provides a single API for searching the web and extracting readable page content, with automatic provider selection.
+A TypeScript/ESM client for web search and page-content extraction in RAG workflows. It exposes one API and selects an available backend automatically.
 
 ## Requirements
 
 - Node.js 24 or newer
-- Network access for the selected provider
-- Google Chrome is required only when using the local browser backend
+- Network access to the selected backend
+- Google Chrome only when the local browser backend is used
 
 ## Installation
 
@@ -14,11 +14,15 @@ A TypeScript web-search client for RAG workflows. It provides a single API for s
 npm install github:lamartinecabral/web-search
 ```
 
-## Usage
+The package is ESM-only, so import it from an ES module:
 
 ```ts
 import { getWebSearchClient } from "@lamartinecabral/web-search";
+```
 
+## Usage
+
+```ts
 const web = await getWebSearchClient({
   tavily: { apiKey: process.env.TAVILY_API_KEY },
 });
@@ -30,29 +34,44 @@ for (const result of results) {
   console.log(result.snippet);
 }
 
-const page = await web.webFetch(results[0].url);
-console.log(page.title);
-console.log(page.content);
+if (results[0]) {
+  const page = await web.webFetch(results[0].url);
+  console.log(page.title);
+  console.log(page.content);
+}
 ```
 
-`webSearch` returns an array of objects with `title`, `url`, and `snippet`. `webFetch` returns an object with `title` and extracted `content`.
-
-## Provider selection
-
-Call `getWebSearchClient` once and reuse the returned client:
+Create the client once and reuse it. `webSearch` returns `SearchResult[]`:
 
 ```ts
-const web = await getWebSearchClient(providerConfig?);
+{
+  title: string;
+  url: string;
+  snippet: string;
+}
 ```
 
-Providers are selected in this order:
+`webFetch` returns a `FetchResult`:
 
-1. Ollama, when `ollama.apiKey` is provided
-2. Tavily, when `tavily.apiKey` is provided
+```ts
+{
+  title: string;
+  content: string;
+}
+```
+
+The returned title can be empty for providers that do not supply one. Both methods reject with an error when the selected backend cannot complete the operation.
+
+## Backend selection
+
+`getWebSearchClient` checks providers in this order:
+
+1. Ollama, when `ollama.apiKey` is set
+2. Tavily, when `tavily.apiKey` is set
 3. Local Chrome with Brave Search, when Chrome is available
-4. DuckDuckGo's HTML search, when it is reachable
+4. DuckDuckGo HTML search and native `fetch`, when DuckDuckGo is reachable
 
-If no provider is available, `getWebSearchClient` throws `Web search feature is not available`.
+Only the first matching backend is used. If none is available, the function throws `Web search feature is not available`.
 
 ### Ollama
 
@@ -76,13 +95,13 @@ Uses Tavily's Search and Extract APIs.
 
 ### Local Chrome
 
-The local backend searches Brave Search and fetches pages through `puppeteer-core`. Chrome is launched with a visible browser window (`headless: false`). The default executable paths are:
+The local backend launches `puppeteer-core` with a visible Chrome window (`headless: false`), searches Brave Search, and extracts content from the requested page. The default executable paths are:
 
 - macOS: `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`
 - Windows: `C:\Program Files\Google\Chrome\Application\chrome.exe`
 - Linux: `/usr/bin/google-chrome`
 
-Set `CHROME_PATH` when Chrome is installed elsewhere:
+Set `CHROME_PATH` before starting Node when Chrome is installed elsewhere:
 
 ```bash
 CHROME_PATH=/path/to/chrome node app.js
@@ -90,7 +109,7 @@ CHROME_PATH=/path/to/chrome node app.js
 
 ### DuckDuckGo fallback
 
-When Chrome is unavailable, the library can use DuckDuckGo's HTML endpoint for search and the native `fetch` API plus content extraction for page fetching. This fallback depends on DuckDuckGo being reachable from the host.
+When Chrome is unavailable, the fallback uses DuckDuckGo's HTML endpoint for search and native `fetch` plus content extraction for page fetching. It depends on DuckDuckGo being reachable from the host.
 
 ## Development
 
@@ -98,10 +117,10 @@ When Chrome is unavailable, the library can use DuckDuckGo's HTML endpoint for s
 npm install
 npm run typecheck
 npm run lint
-npm run lint:fix
+npm run build
 ```
 
-The package is ESM-only and publishes the TypeScript source from `src/`. There is currently no test script in the project.
+Use `npm run lint:fix` to apply Biome fixes. `npm run build` emits JavaScript and declaration files to `dist/`; `prepack` runs the same build automatically. The project currently has no test script.
 
 ## License
 

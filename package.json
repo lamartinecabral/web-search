@@ -12,17 +12,25 @@
     "email": "lamartine.cb@gmail.com"
   },
   "type": "module",
-  "main": "src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
-    "src"
+    "dist"
   ],
-  "exports": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "engines": {
     "node": ">=24"
   },
   "scripts": {
+    "build": "tsc",
     "lint": "biome check",
     "lint:fix": "biome check --write",
+    "prepack": "npm run build",
     "tag": "v=$(node -p \"'v'+require('./package.json').version\") && git tag $v && git push origin $v",
     "typecheck": "tsc --noEmit"
   },

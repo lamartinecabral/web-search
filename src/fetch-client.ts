@@ -1,7 +1,7 @@
 import { extractContent } from "@lamartinecabral/extract-content";
 import { Window } from "happy-dom";
-import type { FetchResult, SearchResult } from "./utils.ts";
-import { Mutex } from "./utils.ts";
+import type { FetchResult, SearchResult } from "./utils.js";
+import { Mutex } from "./utils.js";
 
 const DUCKDUCKGO_URL = "https://html.duckduckgo.com/html";
 

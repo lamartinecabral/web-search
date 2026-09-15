@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
     "lib": ["ESNext"],
-    "allowImportingTsExtensions": true,
+    "declaration": true,
     "erasableSyntaxOnly": true,
-    "module": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "noImplicitAny": false,
-    "rewriteRelativeImportExtensions": true,
+    "allowJs": true,
+    "outDir": "dist",
+    "rootDir": "src",
     "skipLibCheck": true
   }
 }
