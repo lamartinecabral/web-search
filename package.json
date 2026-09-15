@@ -1,0 +1,40 @@
+{
+  "name": "@lamartinecabral/web-search",
+  "version": "1.0.0",
+  "description": "A Web Search tool for RAG workflows with multiple backend support.",
+  "license": "ISC",
+  "author": "lamartinecabral",
+  "repository": {
+    "url": "https://github.com/lamartinecabral/web-search"
+  },
+  "homepage": "https://github.com/lamartinecabral/web-search",
+  "bugs": {
+    "email": "lamartine.cb@gmail.com"
+  },
+  "type": "module",
+  "main": "src/index.ts",
+  "files": [
+    "src"
+  ],
+  "exports": "./src/index.ts",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "lint": "biome check",
+    "lint:fix": "biome check --write",
+    "tag": "v=$(node -p \"'v'+require('./package.json').version\") && git tag $v && git push origin $v",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@lamartinecabral/extract-content": "github:lamartinecabral/extract-content#v0.0.7",
+    "happy-dom": "20.14.5",
+    "puppeteer-core": "25.10.0",
+    "zod": "4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.13",
+    "@types/node": "24",
+    "typescript": "6.0.3"
+  }
+}

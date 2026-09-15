@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "module": "esnext",
+    "noImplicitAny": false,
+    "rewriteRelativeImportExtensions": true,
+    "skipLibCheck": true
+  }
+}
