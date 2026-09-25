@@ -95,13 +95,15 @@ Uses Tavily's Search and Extract APIs.
 
 ### Local Chrome
 
-The local backend launches `puppeteer-core` with a visible Chrome window (`headless: false`), searches Brave Search, and extracts content from the requested page. When `local.chromePath` is set to `"default"`, it uses `CHROME_PATH` if set, otherwise it uses this standard executable path for the current platform:
+The local backend uses `puppeteer-core` to open a visible Chrome window, search Brave Search, and extract content from the requested page. Set `local.chromePath` to the Chrome executable's path, or use `"default"`. With `"default"`, the backend uses the path in the `CHROME_PATH` environment variable when set; otherwise, it uses this platform-specific default:
 
 - macOS: `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`
 - Windows: `C:\Program Files\Google\Chrome\Application\chrome.exe`
 - Linux: `/usr/bin/google-chrome`
 
-Enable the local backend by setting `local.chromePath` to the special value `"default"`:
+The local backend is skipped when `local.chromePath` is omitted.
+
+For example, to use the platform default (or `CHROME_PATH`):
 
 ```ts
 const web = await getWebSearchClient({
@@ -109,19 +111,11 @@ const web = await getWebSearchClient({
 });
 ```
 
-The local backend is skipped when `local.chromePath` is omitted.
-
-For a nonstandard installation, either set `CHROME_PATH` and use `"default"`:
-
-```bash
-CHROME_PATH=/path/to/chrome node app.js
-```
-
-Or pass its executable path directly:
+To use a different Chrome installation, provide its executable path instead:
 
 ```ts
 const web = await getWebSearchClient({
-  local: { chromePath: "/path/to/chrome" },
+  local: { chromePath: "path/to/chrome" },
 });
 ```
 
