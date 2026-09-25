@@ -28,8 +28,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "lint": "biome check",
-    "lint:fix": "biome check --write",
+    "lint": "npx -y biome check",
+    "lint:fix": "npx -y biome check --write",
     "prepack": "npm run build",
     "tag": "v=$(node -p \"'v'+require('./package.json').version\") && git tag $v && git push origin $v",
     "typecheck": "tsc --noEmit"
@@ -41,7 +41,6 @@
     "zod": "4"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.13",
     "@types/node": "24",
     "typescript": "6.0.3"
   }
