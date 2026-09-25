@@ -1,5 +1,8 @@
 import FetchClient, { isDuckduckgoAvailable } from "./fetch-client.js";
-import LocalClient, { isChromeAvailable } from "./local-client.js";
+import LocalClient, {
+  isChromeAvailable,
+  setLocalChromePath,
+} from "./local-client.js";
 import OllamaClient, { setOllamaApiKey } from "./ollama-client.js";
 import TavilyClient, { setTavilyApiKey } from "./tavily-client.js";
 import type { SearchClient } from "./utils.js";
@@ -7,6 +10,7 @@ import type { SearchClient } from "./utils.js";
 export type Provider = {
   ollama?: { apiKey?: string };
   tavily?: { apiKey?: string };
+  local?: { chromePath?: string };
 };
 
 export type { FetchResult, SearchClient, SearchResult } from "./utils.js";
@@ -37,10 +41,18 @@ export const getWebSearchClient = async (
     },
   });
 
-  candidates.push(
-    { isAvailable: isChromeAvailable, getClient: () => LocalClient },
-    { isAvailable: isDuckduckgoAvailable, getClient: () => FetchClient },
-  );
+  candidates.push({
+    isAvailable: () => isChromeAvailable(providerConfig?.local?.chromePath),
+    getClient: () => {
+      setLocalChromePath(providerConfig?.local?.chromePath);
+      return LocalClient;
+    },
+  });
+
+  candidates.push({
+    isAvailable: isDuckduckgoAvailable,
+    getClient: () => FetchClient,
+  });
 
   for (const candidate of candidates) {
     if (await candidate.isAvailable()) return await candidate.getClient();

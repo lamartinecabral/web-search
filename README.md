@@ -68,7 +68,7 @@ The returned title can be empty for providers that do not supply one. Both metho
 
 1. Ollama, when `ollama.apiKey` is set
 2. Tavily, when `tavily.apiKey` is set
-3. Local Chrome with Brave Search, when Chrome is available
+3. Local Chrome with Brave Search, when `local.chromePath` is configured and the executable is available
 4. DuckDuckGo HTML search and native `fetch`, when DuckDuckGo is reachable
 
 Only the first matching backend is used. If none is available, the function throws `Web search feature is not available`.
@@ -95,21 +95,39 @@ Uses Tavily's Search and Extract APIs.
 
 ### Local Chrome
 
-The local backend launches `puppeteer-core` with a visible Chrome window (`headless: false`), searches Brave Search, and extracts content from the requested page. The default executable paths are:
+The local backend launches `puppeteer-core` with a visible Chrome window (`headless: false`), searches Brave Search, and extracts content from the requested page. When `local.chromePath` is set to `"default"`, it uses `CHROME_PATH` if set, otherwise it uses this standard executable path for the current platform:
 
 - macOS: `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`
 - Windows: `C:\Program Files\Google\Chrome\Application\chrome.exe`
 - Linux: `/usr/bin/google-chrome`
 
-Set `CHROME_PATH` before starting Node when Chrome is installed elsewhere:
+Enable the local backend by setting `local.chromePath` to the special value `"default"`:
+
+```ts
+const web = await getWebSearchClient({
+  local: { chromePath: "default" },
+});
+```
+
+The local backend is skipped when `local.chromePath` is omitted.
+
+For a nonstandard installation, either set `CHROME_PATH` and use `"default"`:
 
 ```bash
 CHROME_PATH=/path/to/chrome node app.js
 ```
 
+Or pass its executable path directly:
+
+```ts
+const web = await getWebSearchClient({
+  local: { chromePath: "/path/to/chrome" },
+});
+```
+
 ### DuckDuckGo fallback
 
-When Chrome is unavailable, the fallback uses DuckDuckGo's HTML endpoint for search and native `fetch` plus content extraction for page fetching. It depends on DuckDuckGo being reachable from the host.
+When local Chrome is not configured or unavailable, the fallback uses DuckDuckGo's HTML endpoint for search and native `fetch` plus content extraction for page fetching. It depends on DuckDuckGo being reachable from the host.
 
 ## Development
 

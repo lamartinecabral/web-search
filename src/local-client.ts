@@ -8,7 +8,7 @@ import { Mutex } from "./utils.js";
 const BRAVE_SEARCH_URL = "https://search.brave.com";
 const WEB_TIMEOUT_MS = 25000;
 
-const chromePath: string | undefined =
+const defaultChromePath: string | undefined =
   process.env.CHROME_PATH ||
   {
     darwin: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
@@ -16,7 +16,15 @@ const chromePath: string | undefined =
     linux: "/usr/bin/google-chrome",
   }[process.platform];
 
-export function isChromeAvailable() {
+let chromePath = "";
+
+export const setLocalChromePath = (value?: string) => {
+  chromePath = value === "default" ? (defaultChromePath ?? "") : (value ?? "");
+};
+
+export function isChromeAvailable(chromePath?: string) {
+  if (chromePath === "default") chromePath = defaultChromePath;
+
   if (!chromePath) return false;
 
   try {
