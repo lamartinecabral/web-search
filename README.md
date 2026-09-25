@@ -11,7 +11,7 @@ A TypeScript/ESM client for web search and page-content extraction in RAG workfl
 ## Installation
 
 ```bash
-npm install github:lamartinecabral/web-search
+npm install @lamartinecabral/web-search
 ```
 
 The package is ESM-only, so import it from an ES module:
