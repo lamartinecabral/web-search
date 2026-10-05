@@ -85,6 +85,8 @@ const client = await getWebSearchClient({
 
 Uses Ollama's hosted `web_search` and `web_fetch` APIs.
 
+To get an API key, sign in to or create an account on [Ollama](https://ollama.com), then create a key in [API key settings](https://ollama.com/settings/keys).
+
 ### Tavily
 
 ```ts
@@ -94,6 +96,8 @@ const client = await getWebSearchClient({
 ```
 
 Uses Tavily's Search and Extract APIs.
+
+To get an API key, sign in to or create an account on the [Tavily Platform](https://app.tavily.com). Find or create a key in the dashboard's **API Keys** section.
 
 ### Local Chrome
 
