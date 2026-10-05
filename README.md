@@ -23,11 +23,13 @@ import { getWebSearchClient } from "@lamartinecabral/web-search";
 ## Usage
 
 ```ts
-const web = await getWebSearchClient({
+const client = await getWebSearchClient({
   tavily: { apiKey: process.env.TAVILY_API_KEY },
 });
 
-const results = await web.webSearch("latest developments in retrieval augmented generation");
+const results = await client.webSearch(
+  "latest developments in retrieval augmented generation",
+);
 
 for (const result of results) {
   console.log(result.title, result.url);
@@ -35,7 +37,7 @@ for (const result of results) {
 }
 
 if (results[0]) {
-  const page = await web.webFetch(results[0].url);
+  const page = await client.webFetch(results[0].url);
   console.log(page.title);
   console.log(page.content);
 }
@@ -76,7 +78,7 @@ Only the first matching backend is used. If none is available, the function thro
 ### Ollama
 
 ```ts
-const web = await getWebSearchClient({
+const client = await getWebSearchClient({
   ollama: { apiKey: process.env.OLLAMA_API_KEY },
 });
 ```
@@ -86,7 +88,7 @@ Uses Ollama's hosted `web_search` and `web_fetch` APIs.
 ### Tavily
 
 ```ts
-const web = await getWebSearchClient({
+const client = await getWebSearchClient({
   tavily: { apiKey: process.env.TAVILY_API_KEY },
 });
 ```
