@@ -123,6 +123,8 @@ const web = await getWebSearchClient({
 
 When local Chrome is not configured or unavailable, the fallback uses DuckDuckGo's HTML endpoint for search and native `fetch` plus content extraction for page fetching. It depends on DuckDuckGo being reachable from the host.
 
+> **Warning:** The native `fetch` fallback has a high chance of being blocked by bot-detection systems. A hosted provider such as Ollama or Tavily, or the local Chrome backend, is recommended for more reliable access.
+
 ## Development
 
 ```bash
