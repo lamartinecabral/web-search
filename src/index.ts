@@ -1,16 +1,16 @@
 import FetchClient, { isDuckduckgoAvailable } from "./fetch-client.js";
-import LocalClient, {
-  isChromeAvailable,
-  setLocalChromePath,
-} from "./local-client.js";
 import OllamaClient, { setOllamaApiKey } from "./ollama-client.js";
+import PuppeteerClient, {
+  isChromeAvailable,
+  setChromePath,
+} from "./puppeteer-client.js";
 import TavilyClient, { setTavilyApiKey } from "./tavily-client.js";
 import type { SearchClient } from "./utils.js";
 
 export type Provider = {
   ollama?: { apiKey?: string };
   tavily?: { apiKey?: string };
-  local?: { chromePath?: string };
+  puppeteer?: { chromePath?: string };
 };
 
 export type { FetchResult, SearchClient, SearchResult } from "./utils.js";
@@ -42,10 +42,10 @@ export const getWebSearchClient = async (
   });
 
   candidates.push({
-    isAvailable: () => isChromeAvailable(providerConfig?.local?.chromePath),
+    isAvailable: () => isChromeAvailable(providerConfig?.puppeteer?.chromePath),
     getClient: () => {
-      setLocalChromePath(providerConfig?.local?.chromePath);
-      return LocalClient;
+      setChromePath(providerConfig?.puppeteer?.chromePath);
+      return PuppeteerClient;
     },
   });
 

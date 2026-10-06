@@ -18,7 +18,7 @@ const defaultChromePath: string | undefined =
 
 let chromePath = "";
 
-export const setLocalChromePath = (value?: string) => {
+export const setChromePath = (value?: string) => {
   chromePath = value === "default" ? (defaultChromePath ?? "") : (value ?? "");
 };
 
