@@ -6,7 +6,7 @@ A TypeScript/ESM client for web search and page-content extraction in RAG workfl
 
 - Node.js 24 or newer
 - Network access to the selected backend
-- Google Chrome only when the local browser backend is used
+- Google Chrome only when the Puppeteer backend is used
 
 ## Installation
 
@@ -70,7 +70,7 @@ The returned title can be empty for providers that do not supply one. Both metho
 
 1. Ollama, when `ollama.apiKey` is set
 2. Tavily, when `tavily.apiKey` is set
-3. Local Chrome with Brave Search, when `local.chromePath` is configured and the executable is available
+3. Puppeteer with Brave Search, when `puppeteer.chromePath` is configured and the executable is available
 4. DuckDuckGo HTML search and native `fetch`, when DuckDuckGo is reachable
 
 Only the first matching backend is used. If none is available, the function throws `Web search feature is not available`.
@@ -99,21 +99,21 @@ Uses Tavily's Search and Extract APIs.
 
 To get an API key, sign in to or create an account on the [Tavily Platform](https://app.tavily.com). Find or create a key in the dashboard's **API Keys** section.
 
-### Local Chrome
+### Puppeteer
 
-The local backend uses `puppeteer-core` to open a visible Chrome window, search Brave Search, and extract content from the requested page. Set `local.chromePath` to the Chrome executable's path, or use `"default"`. With `"default"`, the backend uses the path in the `CHROME_PATH` environment variable when set; otherwise, it uses this platform-specific default:
+The Puppeteer backend uses `puppeteer-core` to open a visible Chrome window, search Brave Search, and extract content from the requested page. Set `puppeteer.chromePath` to the Chrome executable's path, or use `"default"`. With `"default"`, the backend uses the path in the `CHROME_PATH` environment variable when set; otherwise, it uses this platform-specific default:
 
 - macOS: `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`
 - Windows: `C:\Program Files\Google\Chrome\Application\chrome.exe`
 - Linux: `/usr/bin/google-chrome`
 
-The local backend is skipped when `local.chromePath` is omitted.
+The Puppeteer backend is skipped when `puppeteer.chromePath` is omitted.
 
 For example, to use the platform default (or `CHROME_PATH`):
 
 ```ts
 const web = await getWebSearchClient({
-  local: { chromePath: "default" },
+  puppeteer: { chromePath: "default" },
 });
 ```
 
@@ -121,15 +121,15 @@ To use a different Chrome installation, provide its executable path instead:
 
 ```ts
 const web = await getWebSearchClient({
-  local: { chromePath: "path/to/chrome" },
+  puppeteer: { chromePath: "path/to/chrome" },
 });
 ```
 
 ### DuckDuckGo fallback
 
-When local Chrome is not configured or unavailable, the fallback uses DuckDuckGo's HTML endpoint for search and native `fetch` plus content extraction for page fetching. It depends on DuckDuckGo being reachable from the host.
+When Puppeteer is not configured or Chrome is unavailable, the fallback uses DuckDuckGo's HTML endpoint for search and native `fetch` plus content extraction for page fetching. It depends on DuckDuckGo being reachable from the host.
 
-> **Warning:** The native `fetch` fallback has a high chance of being blocked by bot-detection systems. A hosted provider such as Ollama or Tavily, or the local Chrome backend, is recommended for more reliable access.
+> **Warning:** The native `fetch` fallback has a high chance of being blocked by bot-detection systems. A hosted provider such as Ollama or Tavily, or the Puppeteer backend, is recommended for more reliable access.
 
 ## Development
 
