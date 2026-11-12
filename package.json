@@ -1,6 +1,6 @@
 {
   "name": "@lamartinecabral/web-search",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A Web Search tool for RAG workflows with multiple backend support.",
   "license": "ISC",
   "author": "lamartinecabral",
@@ -36,9 +36,9 @@
   },
   "dependencies": {
     "@lamartinecabral/extract-content": "0.0.7",
-    "happy-dom": "20.14.5",
-    "puppeteer-core": "25.10.0",
-    "zod": "4"
+    "happy-dom": "21.0.4",
+    "puppeteer-core": "25.17.0",
+    "zod": "4.6.7"
   },
   "devDependencies": {
     "@types/node": "24",
